@@ -1,7 +1,7 @@
 import random
 import math
 
-def simulationBlackScholes(S0, r, sigma, T, deltat, method="Euler", randomSeed=None):
+def simulateStock(S0, r, sigma, T, deltat, method="Euler", randomSeed=None):
 
 	if randomSeed is None:
 		random.seed()
@@ -15,31 +15,36 @@ def simulationBlackScholes(S0, r, sigma, T, deltat, method="Euler", randomSeed=N
 	stockPrice[0] = S
 
 	if method == "Euler":
-
 		for i in range(1, n):
 			S = S + r * deltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(deltat)
 			stockPrice[i] = S
-
 		S = S + r * lastdeltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(lastdeltat)
 		stockPrice[n] = S
 
 	else:
-
 		print("Unkown method for simulationBlackScholes")
 
 	return stockPrice, n, lastdeltat
+
+def simulateMaxOption(K, S0, r, sigma, T, deltat, method="Euler", randomSeed=None):
+
+	stockPrice, n, lastdeltat = simulateStock(S0, r, sigma, T, deltat, method="Euler", randomSeed=None)
+	return max(0, max(stockPrice) - K), stockPrice, n, lastdeltat
+
 
 if __name__ == '__main__':
 
 	import matplotlib.pyplot as plt
 
-	S0 = 10
+	K = 8.0
+	S0 = 10.0
 	r = 0.05
 	sigma = 0.1
 	T = 1.0
 	deltat = 0.0001
 
-	stockPrice, n, lastdeltat = simulationBlackScholes(S0, r, sigma, T, deltat, method="Euler", randomSeed=None)
-
+	optionPrice, stockPrice, n, lastdeltat = simulateMaxOption(K, S0, r, sigma, T, deltat, method="Euler", randomSeed=None)
+	
+	print(optionPrice)
 	plt.plot(stockPrice)
 	plt.show()
