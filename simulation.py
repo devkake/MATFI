@@ -19,7 +19,7 @@ def simulateStock(S0, mu, sigma, T, discretization, method="Euler", randomSeed=N
 
 	if method == "Euler":
 		for i in range(1, discretization + 1):
-			S = S + mu * deltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(deltat)
+			S = S * (1 + mu * deltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(deltat))
 			stockPrice[i] = S
 			timeList[i] = i * deltat
 
@@ -47,7 +47,7 @@ def simulateMaxOption(K, S0, mu, sigma, T, discretization, stockSimulation=True,
 
 		if method == "Euler":
 			for i in range(1, discretization + 1):
-				S = S + mu * deltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(deltat)
+				S = S * (1 + mu * deltat + sigma * random.normalvariate(0.0, 1.0) * math.sqrt(deltat))
 				if maxS < S:
 					maxS = S
 
@@ -114,12 +114,12 @@ if __name__ == '__main__':
 	discretization = 1000
 
 
-	"""
+	
 	optionPrice, stockPrice, timeList, deltat = simulateMaxOption(K, S0, mu, sigma, T, discretization, stockSimulation=True, method="Euler", randomSeed=None)
 	print(optionPrice)
 	plt.plot(timeList, stockPrice)
 	plt.show()
-	"""
+	
 
 	"""
 	discretizationList = [1000, 2000, 3000]
@@ -127,9 +127,10 @@ if __name__ == '__main__':
 	statistics = statisticsMaxOption(discretizationList, trialNumber, K, S0, mu, sigma, T, method="Euler", randomSeed=None)
 	print(statistics)
 	"""
-
+	"""
 	MCiteration = 1000
 	discretizationList = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
 	optionPricePresent, optionPricePresentVariance = calculateMaxOptionPrice(MCiteration, discretizationList, K, S0, r, mu, sigma, T, method="Euler", randomSeed=None)
 	print(optionPricePresent)
 	print(optionPricePresentVariance)
+	"""
